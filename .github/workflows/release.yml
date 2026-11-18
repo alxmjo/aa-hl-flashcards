@@ -2,13 +2,9 @@ name: Build and release deck
 
 # Runs when a release is published (from the GitHub website or the API),
 # so students only ever receive a deck that has been tested.
-# A pushed tag (v*) also publishes: the workflow then creates the release itself, with the title
-# and notes from release-notes/<tag>.md (first line: the title; the rest: the notes).
 on:
   release:
     types: [published]
-  push:
-    tags: ["v*"]
   workflow_dispatch:
 
 permissions:
@@ -38,23 +34,6 @@ jobs:
         with:
           name: IB_Math_AA_HL
           path: dist/IB_Math_AA_HL.apkg
-
-      - name: Read the release notes for a pushed tag
-        if: github.event_name == 'push'
-        id: notes
-        run: |
-          f="release-notes/${GITHUB_REF_NAME}.md"
-          test -s "$f" || { echo "missing $f"; exit 1; }
-          echo "title=$(head -n 1 "$f")" >> "$GITHUB_OUTPUT"
-          tail -n +2 "$f" > dist/notes.md
-
-      - name: Create the release from a pushed tag
-        if: github.event_name == 'push'
-        uses: softprops/action-gh-release@v2
-        with:
-          name: ${{ steps.notes.outputs.title }}
-          body_path: dist/notes.md
-          files: dist/IB_Math_AA_HL.apkg
 
       - name: Attach to the release
         if: github.event_name == 'release'

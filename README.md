@@ -100,4 +100,5 @@ Importing never deletes cards. When a card is retired, the release notes give a 
 1. Commit and push the CSV changes. This does not change what students download.
 2. Test the built deck in Anki.
 3. Publish a release (for example tag `v2026-10-23`). The workflow builds the deck and attaches it, and the student download link then serves the new version.
+   Alternatively, commit `release-notes/<tag>.md` (first line: the release title; the rest: the notes) and push the tag. The workflow then creates the release itself.
 4. Retire a card by setting `active` to `no`; never delete the row. List retired IDs in the release notes as a Browse search, for example `ID:1.4-C35 OR ID:1.4-D01`.

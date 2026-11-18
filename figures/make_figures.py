@@ -749,6 +749,94 @@ FIGS["1.17-H01"] = svg(360, 158, taxis(M, -0.3, 13.6, "t") + yaxis(M, -0.35, 3.8
     + "".join(lab(M, s, 0, f"t<tspan baseline-shift=\"sub\" font-size=\"9\">{i + 1}</tspan>", anchor="middle", dy=18) for i, s in enumerate(sols)))
 
 
+# ---------------- 2.1 Further Trigonometry ----------------
+def asym(M, x, y0, y1):
+    return line(M(x, y0), M(x, y1), dash=True, w=1.0)
+
+
+def safe(fn, g):
+    """fn(x), or None where g(x) is (nearly) zero."""
+    return lambda x: None if abs(g(x)) < 1e-3 else fn(x)
+
+
+def htick_r(M, y, s, dy=5):
+    """Tick on the vertical axis at y with label s to its right."""
+    q = M(0, y)
+    return line((q[0] - 4, q[1]), (q[0] + 4, q[1]), w=1.2) + text(q[0] + 8, q[1] + dy, s, anchor="start", size=13)
+
+
+# 2.1-A10 (also A04 / A05): y = cosec x (accent) from y = sin x (plain)
+M = mk2(30, 82, 42, 22)
+FIGS["2.1-A10"] = svg(345, 165, taxis(M, -0.3, 2 * PI + 0.45) + yaxis(M, -3.3, 3.3)
+    + "".join(asym(M, a, -3.2, 3.2) for a in (PI, 2 * PI))
+    + curve(M, math.sin, 0, 2 * PI, n=120, acc=False, w=1.6)
+    + ccurve(M, safe(lambda x: 1 / math.sin(x), math.sin), 0.01, 2 * PI - 0.01, -3.1, 3.1, n=600)
+    + htick(M, 1, "1") + htick(M, -1, "−1")
+    + vtick(M, PI / 2, "π/2", dx=0, below=True) + vtick(M, PI, "π", dx=9) + vtick(M, 2 * PI, "2π", dx=13)
+    + lab(M, PI / 2, 2.5, "y = cosec x", anchor="middle", acc=True)
+    + lab(M, 3 * PI / 2, 0.45, "y = sin x", anchor="middle"))
+
+# 2.1-A06 (also A07): y = sec x (accent) from y = cos x (plain)
+M = mk2(30, 82, 42, 22)
+FIGS["2.1-A06"] = svg(345, 165, taxis(M, -0.3, 2 * PI + 0.45) + yaxis(M, -3.3, 3.3)
+    + "".join(asym(M, a, -3.2, 3.2) for a in (PI / 2, 3 * PI / 2))
+    + curve(M, math.cos, 0, 2 * PI, n=120, acc=False, w=1.6)
+    + ccurve(M, safe(lambda x: 1 / math.cos(x), math.cos), 0, 2 * PI, -3.1, 3.1, n=600)
+    + htick(M, 1, "1") + htick(M, -1, "−1")
+    + vtick(M, PI / 2, "π/2", dx=-16) + vtick(M, 3 * PI / 2, "3π/2", dx=22) + vtick(M, 2 * PI, "2π", dx=0)
+    + lab(M, PI, -2.6, "y = sec x", anchor="middle", acc=True)
+    + lab(M, PI, 0.45, "y = cos x", anchor="middle"))
+
+# 2.1-A08 (also A09): y = cot x
+M = mk2(30, 82, 42, 22)
+FIGS["2.1-A08"] = svg(345, 165, taxis(M, -0.3, 2 * PI + 0.45) + yaxis(M, -3.3, 3.3)
+    + "".join(asym(M, a, -3.2, 3.2) for a in (PI, 2 * PI))
+    + ccurve(M, safe(lambda x: math.cos(x) / math.sin(x), math.sin), 0.01, 2 * PI - 0.01, -3.1, 3.1, n=800)
+    + vtick(M, PI / 2, "π/2", dx=-15) + vtick(M, PI, "π", dx=9) + vtick(M, 3 * PI / 2, "3π/2", dx=-21) + vtick(M, 2 * PI, "2π", dx=13)
+    + lab(M, PI + 0.6, 2.6, "y = cot x", anchor="start", acc=True))
+
+
+# 2.1-B01..B03: inverse function (accent), its restricted original (plain), mirror line y = x (dashed)
+def inverse_fig(name, fn, inv, x0, x1, u0, u1, ticks_, labels, ox=130, oy=95, s=34, w=270, h=190, ytop=2.7, ybot=-2.7, clip=2.7):
+    M = mk(ox, oy, s)
+    e = min(2.6, ytop - 0.1)
+    return M, svg(w, h, xaxis(M, -3.4, 3.5) + yaxis(M, ybot, ytop) + line(M(-2.6, -2.6), M(e, e), dash=True, w=1.0)
+        + text(M(-2.6, -2.6)[0] - 4, M(-2.6, -2.6)[1] + 4, "y = x", anchor="end", italic=True, size=12)
+        + ccurve(M, fn, x0, x1, -clip, clip, n=200, acc=False, w=1.6) + ccurve(M, inv, u0, u1, -3.3, 3.3, n=400)
+        + "".join(t(M) for t in ticks_) + "".join(l(M) for l in labels))
+
+
+M, FIGS["2.1-B01"] = inverse_fig("2.1-B01", math.sin, math.asin, -PI / 2, PI / 2, -1, 1,
+    [lambda M: vtick(M, -PI / 2, "−π/2", dx=-6), lambda M: vtick(M, 1, "1", dx=4),
+     lambda M: htick(M, PI / 2, "π/2"), lambda M: htick_r(M, -PI / 2, "−π/2")],
+    [lambda M: lab(M, 1.35, 0.55, "y = sin x"), lambda M: lab(M, -0.25, 2.15, "y = arcsin x", anchor="end", acc=True)],
+    ox=150, w=290)
+
+M, FIGS["2.1-B02"] = inverse_fig("2.1-B02", math.cos, math.acos, 0, PI, -1, 1,
+    [lambda M: vtick(M, PI, "π", dx=0), lambda M: vtick(M, -1, "−1", dx=-6), lambda M: htick_r(M, PI, "π")],
+    [lambda M: lab(M, PI - 0.1, -1.45, "y = cos x", anchor="end"), lambda M: lab(M, -1.15, PI - 0.1, "y = arccos x", anchor="end", acc=True)],
+    ox=150, oy=128, s=30, w=290, h=225, ytop=3.7, ybot=-2.8)
+
+M, FIGS["2.1-B03"] = inverse_fig("2.1-B03", lambda x: math.tan(x) if abs(math.cos(x)) > 1e-3 else None, math.atan,
+    -PI / 2 + 0.01, PI / 2 - 0.01, -3.4, 3.4,
+    [lambda M: line(M(-3.4, PI / 2), M(3.5, PI / 2), acc=True, dash=True, w=1.0),
+     lambda M: line(M(-3.4, -PI / 2), M(3.5, -PI / 2), acc=True, dash=True, w=1.0),
+     lambda M: text(M(0, PI / 2)[0] - 6, M(0, PI / 2)[1] - 6, "π/2", anchor="end", size=13),
+     lambda M: text(M(0, -PI / 2)[0] + 6, M(0, -PI / 2)[1] + 16, "−π/2", anchor="start", size=13)],
+    [lambda M: lab(M, -1.13, -2.45, "y = tan x", anchor="middle", dy=12), lambda M: lab(M, 1.25, 0.42, "y = arctan x", acc=True)],
+    ox=140, oy=105, w=290, h=210, clip=2.15)
+
+# 2.1-E10: R cos(alpha) = a and R sin(alpha) = b, so alpha is the angle of the point (a, b)
+c, r = P(110, 100), 70
+Q = pt(c, r, 140)
+FIGS["2.1-E10"] = svg(270, 190, axes(c, r, extra=12) + line(c, Q, acc=True) + dot(Q, 3)
+    + line(Q, (Q[0], c[1]), dash=True, w=1.0) + arc(c, 22, 0, 140, acc=True)
+    + angle_label(c, 36, 0, 140, "α", italic=True, acc=True)
+    + text(Q[0] - 6, Q[1] - 8, "(a, b)", anchor="end", italic=True)
+    + text((c[0] + Q[0]) / 2 - 4, (c[1] + Q[1]) / 2 - 8, "R", italic=True, acc=True)
+    + text(c[0] + 22, c[1] - 62, "a &lt; 0, b &gt; 0", anchor="start", italic=True, size=12)
+    + text(c[0] + 22, c[1] - 46, "α in quadrant 2", anchor="start", size=12))
+
 if __name__ == "__main__":
     for name, s in FIGS.items():
         open(os.path.join(HERE, f"{name}.svg"), "w").write(s + "\n")

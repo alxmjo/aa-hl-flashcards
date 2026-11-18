@@ -15,4 +15,5 @@ python3 build_math_deck.py --out dist/IB_Math_AA_HL.apkg \
   --csv csv/1.14_quadratic_functions.csv --ref 1.14 --name "Quadratic Functions" \
   --csv csv/1.15_functions.csv         --ref 1.15 --name "Functions" \
   --csv csv/1.16_transformations.csv   --ref 1.16 --name "Transformations of Functions" \
-  --csv csv/1.17_trig_functions.csv     --ref 1.17 --name "Trigonometric Functions"
+  --csv csv/1.17_trig_functions.csv     --ref 1.17 --name "Trigonometric Functions" \
+  --csv csv/2.1_further_trig.csv       --ref 2.1 --name "Further Trigonometry"

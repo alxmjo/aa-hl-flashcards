@@ -1,8 +1,23 @@
 name: Build and release deck
 
-# Runs when a release is published (from the GitHub website or the API),
-# so students only ever receive a deck that has been tested.
+# Two ways to publish:
+#
+# 1. Push a change to RELEASE.md on main. The workflow builds the deck and
+#    creates the release itself. RELEASE.md's first line is the release name,
+#    "TAG: summary" (for example "v2026-11-19: Chapter 2.2 Vectors"); the rest
+#    of the file is the release notes. A tag containing "-test" (for example
+#    v2026-11-19-test) is published as a pre-release, which never becomes the
+#    "latest" release, so the student download link is unchanged. If a release
+#    with that tag already exists, nothing is published.
+#
+# 2. Publish a release from the GitHub website. The workflow builds the deck
+#    and attaches it to that release.
+#
+# Running the workflow by hand only builds the deck and keeps it on the run.
 on:
+  push:
+    branches: [main]
+    paths: [RELEASE.md]
   release:
     types: [published]
   workflow_dispatch:
@@ -13,8 +28,31 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
+
+      - name: Read RELEASE.md
+        if: github.event_name == 'push'
+        id: rel
+        run: |
+          title=$(head -n 1 RELEASE.md | tr -d '\r')
+          tag=${title%%:*}
+          if ! [[ "$tag" =~ ^v[0-9]{4}-[0-9]{2}-[0-9]{2}[0-9A-Za-z.-]*$ ]] || [ "$tag" = "$title" ]; then
+            echo "RELEASE.md must start with a line like 'v2026-11-19: Summary'; got: $title"
+            exit 1
+          fi
+          tail -n +2 RELEASE.md > "$RUNNER_TEMP/notes.md"
+          if gh release view "$tag" >/dev/null 2>&1; then exists=true; else exists=false; fi
+          if [[ "$tag" == *-test* ]]; then pre=true; else pre=false; fi
+          {
+            echo "tag=$tag"
+            echo "title=$title"
+            echo "exists=$exists"
+            echo "pre=$pre"
+          } >> "$GITHUB_OUTPUT"
+          echo "Tag: $tag | pre-release: $pre | already released: $exists"
 
       - uses: actions/setup-python@v5
         with:
@@ -34,6 +72,24 @@ jobs:
         with:
           name: IB_Math_AA_HL
           path: dist/IB_Math_AA_HL.apkg
+
+      - name: Create the release from RELEASE.md
+        if: github.event_name == 'push' && steps.rel.outputs.exists == 'false'
+        env:
+          TAG: ${{ steps.rel.outputs.tag }}
+          TITLE: ${{ steps.rel.outputs.title }}
+          PRE: ${{ steps.rel.outputs.pre }}
+        run: |
+          if [ "$PRE" = "true" ]; then
+            flags="--prerelease --latest=false"
+          else
+            flags="--latest"
+          fi
+          gh release create "$TAG" dist/IB_Math_AA_HL.apkg \
+            --target "$GITHUB_SHA" \
+            --title "$TITLE" \
+            --notes-file "$RUNNER_TEMP/notes.md" \
+            $flags
 
       - name: Attach to the release
         if: github.event_name == 'release'

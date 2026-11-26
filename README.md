@@ -38,7 +38,7 @@ Other apps with "Anki" in their name are not compatible with this deck.
 
 ### Download the deck
 
-**[Download the latest deck](https://github.com/alxmjo/ib-math-aa-hl-anki/releases/latest/download/IB_Math_AA_HL.apkg)**
+**[Download the latest deck](https://github.com/alxmjo/aa-hl-flashcards/releases/latest/download/IB_Math_AA_HL.apkg)**
 
 The link always gives the newest version. Might be worth bookmarking. 
 

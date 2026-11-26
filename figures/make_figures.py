@@ -837,6 +837,28 @@ FIGS["2.1-E10"] = svg(270, 190, axes(c, r, extra=12) + line(c, Q, acc=True) + do
     + text(c[0] + 22, c[1] - 62, "a &lt; 0, b &gt; 0", anchor="start", italic=True, size=12)
     + text(c[0] + 22, c[1] - 46, "α in quadrant 2", anchor="start", size=12))
 
+# ---------- Chapter 2.2 ----------
+# 2.2-D02: y = a^x is increasing for a > 1 and decreasing for 0 < a < 1; both pass through (0, 1)
+M1, M2 = mk(75, 112, 22), mk(225, 112, 22)
+def exp_panel(M, fn, x0, x1, caption, cx, side):
+    one = lab(M, 0, 1, "1", anchor="end", dx=-6, dy=-5) if side < 0 else lab(M, 0, 1, "1", dx=6, dy=-5)
+    return (xaxis(M, -2.9, 2.9, False) + yaxis(M, -0.5, 4.2, False) + curve(M, fn, x0, x1)
+            + dot(M(0, 1), 3) + one
+            + text(cx, 136, caption, italic=True, size=13))
+FIGS["2.2-D02"] = svg(300, 145, exp_panel(M1, lambda x: 2 ** x, -2.9, 2.0, "a &gt; 1: increasing", 75, -1)
+    + exp_panel(M2, lambda x: 0.5 ** x, -2.0, 2.9, "0 &lt; a &lt; 1: decreasing", 225, 1))
+
+# 2.2-D04: sketch of y = 2^(-x) - 2 from its asymptote, y-intercept and two more points
+M = mk(130, 88, 21)
+g22 = lambda x: 2 ** (-x) - 2
+FIGS["2.2-D04"] = svg(270, 160, xaxis(M, -4.2, 6.0) + yaxis(M, -3.0, 3.4)
+    + line(M(-4.2, -2), M(6.0, -2), acc=True, dash=True, w=1.2)
+    + lab(M, 6.0, -2, "y = −2", anchor="end", acc=True, dy=16)
+    + curve(M, g22, -2.45, 5.9)
+    + dot(M(0, -1), 3) + lab(M, 0, -1, "(0, −1)", dx=7, dy=-6)
+    + dot(M(-2, 2), 3) + lab(M, -2, 2, "(−2, 2)", anchor="end", dx=-8, dy=4)
+    + dot(M(2, -1.75), 3) + lab(M, 2, -1.75, "(2, −1.75)", dx=4, dy=-9))
+
 if __name__ == "__main__":
     for name, s in FIGS.items():
         open(os.path.join(HERE, f"{name}.svg"), "w").write(s + "\n")

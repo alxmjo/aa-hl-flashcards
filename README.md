@@ -19,6 +19,7 @@ The deck currently covers these textbook chapters. The code gives the book and c
 | 1.16 | Transformations of Functions | 24 |
 | 1.17 | Trigonometric Functions | 23 |
 | 2.1 | Further Trigonometry | 44 |
+| 2.2 | Exponential Functions | 16 |
 
 Each chapter's count includes one quote card.
 

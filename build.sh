@@ -17,4 +17,5 @@ python3 build_math_deck.py --out dist/IB_Math_AA_HL.apkg \
   --csv csv/1.16_transformations.csv   --ref 1.16 --name "Transformations of Functions" \
   --csv csv/1.17_trig_functions.csv     --ref 1.17 --name "Trigonometric Functions" \
   --csv csv/2.1_further_trig.csv       --ref 2.1 --name "Further Trigonometry" \
-  --csv csv/2.2_exponential_functions.csv --ref 2.2 --name "Exponential Functions"
+  --csv csv/2.2_exponential_functions.csv --ref 2.2 --name "Exponential Functions" \
+  --csv csv/2.3_logarithms.csv         --ref 2.3 --name "Logarithms"

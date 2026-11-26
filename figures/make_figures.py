@@ -859,6 +859,35 @@ FIGS["2.2-D04"] = svg(270, 160, xaxis(M, -4.2, 6.0) + yaxis(M, -3.0, 3.4)
     + dot(M(-2, 2), 3) + lab(M, -2, 2, "(−2, 2)", anchor="end", dx=-8, dy=4)
     + dot(M(2, -1.75), 3) + lab(M, 2, -1.75, "(2, −1.75)", dx=4, dy=-9))
 
+# ---------- Chapter 2.3 ----------
+def sup(base, exp):
+    """Text such as a^x, with the exponent raised."""
+    return f'{base}<tspan dy="-6" font-size="10">{exp}</tspan>'
+
+
+# 2.3-H01: y = log_a x is the reflection of y = a^x in y = x (drawn for a = 2)
+M = mk(80, 118, 22)
+t23 = [-3.0 + 5.2 * i / 80 for i in range(81)]
+FIGS["2.3-H01"] = svg(250, 205, xaxis(M, -3.2, 7.2) + yaxis(M, -3.6, 4.0)
+    + line(M(-3.2, -3.2), M(4.8, 4.8), dash=True, w=1.2)
+    + lab(M, 4.8, 4.8, "y = x", dx=5, dy=4)
+    + poly([M(t, 2 ** t) for t in t23], closed=False).replace('stroke-width="1.6"', 'stroke-width="2.0"')
+    + poly([M(2 ** t, t) for t in t23], acc=True, closed=False).replace('stroke-width="1.6"', 'stroke-width="2.0"')
+    + text(M(-0.5, 2.6)[0], M(-0.5, 2.6)[1], "y = " + sup("a", "x"), anchor="end", italic=True, size=13)
+    + lab(M, 4.6, 2.2, "y = log<tspan dy=\"4\" font-size=\"10\">a</tspan><tspan dy=\"-4\" dx=\"3\">x</tspan>", anchor="middle", acc=True, dy=16)
+    + dot(M(0, 1), 3) + lab(M, 0, 1, "(0, 1)", anchor="end", dx=-6, dy=-4)
+    + dot(M(1, 0), 3) + lab(M, 1, 0, "(1, 0)", dx=4, dy=17))
+
+# 2.3-H03: y = log_2(x - 1) + 1, with its vertical asymptote x = 1
+M = mk(40, 112, 22)
+h23 = lambda x: math.log2(x - 1) + 1
+FIGS["2.3-H03"] = svg(260, 160, xaxis(M, -1.2, 9.3) + yaxis(M, -2.0, 4.6)
+    + line(M(1, -2.0), M(1, 4.6), acc=True, dash=True, w=1.2)
+    + lab(M, 1, 4.6, "x = 1", acc=True, dx=6, dy=10)
+    + poly([M(1 + 2 ** t, t + 1) for t in [-3.0 + 6.0 * i / 80 for i in range(81)]], acc=False, closed=False).replace('stroke-width="1.6"', 'stroke-width="2.0"')
+    + dot(M(2, 1), 3) + lab(M, 2, 1, "(2, 1)", dx=8, dy=14)
+    + dot(M(5, 3), 3) + lab(M, 5, 3, "(5, 3)", dx=-4, dy=-10, anchor="end"))
+
 if __name__ == "__main__":
     for name, s in FIGS.items():
         open(os.path.join(HERE, f"{name}.svg"), "w").write(s + "\n")

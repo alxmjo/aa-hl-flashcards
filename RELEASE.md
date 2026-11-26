@@ -1,10 +1,17 @@
-v2026-11-24: Revised two-triangle card in 1.9
-One change to the sine rule cards in **1.9 Non-Right Angled Triangle Trigonometry**.
+v2026-11-26: Chapter 2.2 Exponential Functions
+A new chapter: **2.02 Exponential Functions**, with 15 cards and a quote card.
 
-**Changed**
+**New cards**
 
-- **1.9-C03** (two sides and a non-included angle): the card now asks when you should check for a second triangle. Check when the given angle is acute and is opposite the shorter of the two given sides. The Extra field no longer uses the perpendicular-height condition. Instead it shows how the value of sin C from the sine rule gives no triangle (sin C > 1), one right-angled triangle (sin C = 1) or two triangles (sin C < 1). Your review progress on this card is kept.
+- **Rational exponents:** writing a^(m/n) as a root; writing an expression such as 1/(x√x) as a single power of x.
+- **Expansion and factorisation:** factorising expressions such as 3^(n+2) + 3^n; the middle term of (a^x + a^(−x))².
+- **Exponential equations:** equating exponents once both sides have the same base; solving equations that are quadratics in a^x, and rejecting solutions where a^x ≤ 0.
+- **Exponential functions:** the horizontal asymptote and range of y = p·a^(x−h) + k; when y = a^x is increasing or decreasing; the strategy for sketching an exponential graph.
+- **Growth and decay:** finding the base of a model from two points; the half-life model; what the constant k means in a decay model.
+- **The natural exponential:** continuous compound interest, A = A₀e^(rt); the value of e.
+
+No cards were changed or retired, so your other chapters are unaffected.
 
 **How to update**
 
-Download the deck from the usual link and import it with **Import any deck presets** turned on and the other import options at their defaults. Your review progress is kept.
+Download the deck from the usual link and import it with **Import any deck presets** turned on and the other import options at their defaults. Your review progress is kept, and the new chapter is set to 10 new cards per day.
